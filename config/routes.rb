@@ -1,3 +1,6 @@
 Rails.application.routes.draw do
-  resources :questions
+
+  resources :questions do
+    resources :answers, shallow: true, only: %i[new create show]
+  end
 end
