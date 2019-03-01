@@ -2,7 +2,7 @@ class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
 
   def index
-    @question = Question.all
+    @questions = Question.all
   end
 
   def show
