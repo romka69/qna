@@ -13,12 +13,19 @@ class QuestionsController < ApplicationController
 
   def create
     @question = Question.new(question_params)
+    @question.author = current_user
 
     if @question.save
       redirect_to @question, notice: 'Your question successfully created.'
     else
       render :new
     end
+  end
+
+  def destroy
+    question.destroy if current_user.author_it?(question)
+
+    redirect_to questions_path, notice: 'Question was deleted.'
   end
 
   private

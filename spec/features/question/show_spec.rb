@@ -2,8 +2,9 @@ require 'rails_helper'
 
 feature 'User can see question with answers for it' do
 
-  given!(:question) { create(:question) }
-  given!(:answers) { create_list(:answer_sequence, 3, question: question) }
+  given(:user) { create(:user) }
+  given!(:question) { create(:question, author: user) }
+  given!(:answers) { create_list(:answer_sequence, 3, question: question, author: user) }
 
   scenario 'view question with list answers' do
     visit questions_path
