@@ -27,7 +27,7 @@ feature 'User can delete answer', %q{
       visit questions_path
       click_on question.title
 
-      expect(page).to_not have_content 'Delete answer'
+      expect(page).to_not have_link 'Delete answer'
     end
   end
 
@@ -35,6 +35,6 @@ feature 'User can delete answer', %q{
     visit questions_path
     click_on question.title
 
-    expect(page).to_not have_content 'Delete answer'
+    expect(page).to_not have_link 'Delete answer'
   end
 end

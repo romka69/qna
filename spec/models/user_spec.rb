@@ -11,12 +11,13 @@ RSpec.describe User, type: :model do
   let!(:user2) { create :user }
   let!(:question) { create :question, author: user1 }
 
-  describe 'User#author_it?' do
+  describe 'User#author_of?' do
     it 'yes' do
-      expect(user1).to be_author_it(question)
+      expect(user1).to be_author_of(question)
     end
+
     it 'no' do
-      expect(user2).to_not be_author_it(question)
+      expect(user2).to_not be_author_of(question)
     end
   end
 end

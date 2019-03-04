@@ -13,9 +13,12 @@ class AnswersController < ApplicationController
   end
 
   def destroy
-    answer.destroy if current_user.author_it?(answer)
+    if current_user.author_of?(answer)
+      answer.destroy
+      flash[:notice] = 'Answer was deleted.'
+    end
 
-    redirect_to question_path(answer.question), notice: 'Answer was deleted.'
+    redirect_to question_path(answer.question)
   end
 
   private

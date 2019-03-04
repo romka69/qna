@@ -21,10 +21,6 @@ feature 'User can sign in', %q{
       expect(page).to have_content 'Signed in successfully.'
     end
 
-    scenario "see button 'log out'" do
-      expect(page).to have_content 'Log out'
-    end
-
     scenario 'can logout' do
       click_on 'Log out'
 
