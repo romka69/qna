@@ -10,12 +10,26 @@ feature 'User can sign in', %q{
 
   background { visit new_user_session_path }
 
-  scenario 'Register user tries to sign in' do
-    fill_in 'Email', with: user.email
-    fill_in 'Password', with: user.password
-    click_on 'Log in'
+  describe 'Register user' do
+    background do
+      fill_in 'Email', with: user.email
+      fill_in 'Password', with: user.password
+      click_on 'Log in'
+    end
 
-    expect(page).to have_content 'Signed in successfully.'
+    scenario 'tries to sign in' do
+      expect(page).to have_content 'Signed in successfully.'
+    end
+
+    scenario "see button 'log out'" do
+      expect(page).to have_content 'Log out'
+    end
+
+    scenario 'can logout' do
+      click_on 'Log out'
+
+      expect(page).to have_content 'Signed out successfully.'
+    end
   end
 
   scenario 'Unregistered user tries to sign in' do
