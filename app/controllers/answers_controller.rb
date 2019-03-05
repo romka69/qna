@@ -6,12 +6,14 @@ class AnswersController < ApplicationController
     @answer.author = current_user
     @answer.save
     flash[:notice] = 'Your answer successfully created.'
+  end
 
-    #if @answer.save
-    #  redirect_to question, notice: 'Your answer successfully created.'
-    #else
-    #  render 'questions/show'
-    #end
+  def update
+    if current_user.author_of?(answer)
+      answer.update(answer_params)
+      question = answer.question
+      flash[:notice] = 'Answer was updated.'
+    end
   end
 
   def destroy
@@ -33,7 +35,7 @@ class AnswersController < ApplicationController
     @question = Question.find(params[:question_id])
   end
 
-  helper_method :answer, :question
+  helper_method :answer #, :question
 
   def answer_params
     params.require(:answer).permit(:body)
