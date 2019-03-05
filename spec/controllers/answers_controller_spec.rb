@@ -126,8 +126,7 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     context 'Not author' do
-      let!(:user1) { create :user }
-      let!(:answer) { create :answer, question: question, author: user1 }
+      let(:user1) { create :user }
 
       before { login(user1) }
 

@@ -22,6 +22,14 @@ class QuestionsController < ApplicationController
     end
   end
 
+  def update
+    if current_user.author_of?(question)
+      question.update(question_params)
+      flash[:notice] = 'Question was updated.'
+      @questions = Question.all
+    end
+  end
+
   def destroy
     if current_user.author_of?(question)
       question.destroy
