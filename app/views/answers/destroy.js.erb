@@ -1,0 +1,5 @@
+$('.flash').append('<%= render 'shared/flash' %>');
+//$('#answer-' + <%= answer.id %>).remove('');
+$('#answer-' + <%= answer.id %>).bind('ajax:success', function () {
+    $(this).remove('');
+});

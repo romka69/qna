@@ -48,13 +48,13 @@ RSpec.describe AnswersController, type: :controller do
       before { login(user1) }
 
       it 'deletes the answer' do
-        expect { delete :destroy, params: { id: answer } }.to change(question.answers, :count).by(-1)
+        expect { delete :destroy, params: { id: answer }, format: :js }.to change(question.answers, :count).by(-1)
       end
 
-      it 'redirect to question#show' do
-        delete :destroy, params: { id: answer }
+      it 'response is 200' do
+        delete :destroy, params: { id: answer }, format: :js
 
-        expect(response).to redirect_to question_path(question)
+        expect(response).to have_http_status(200)
       end
     end
 
@@ -62,13 +62,13 @@ RSpec.describe AnswersController, type: :controller do
       before { login(user) }
 
       it 'deletes the answer' do
-        expect { delete :destroy, params: { id: answer } }.to_not change(Answer, :count)
+        expect { delete :destroy, params: { id: answer }, format: :js }.to_not change(Answer, :count)
       end
 
-      it 'redirect to question#show' do
-        delete :destroy, params: { id: answer }
+      it 'response is 401' do
+        delete :destroy, params: { id: answer }, format: :js
 
-        expect(response).to redirect_to question_path(question)
+        expect(response).to have_http_status(401)
       end
     end
 
@@ -77,10 +77,10 @@ RSpec.describe AnswersController, type: :controller do
         expect { delete :destroy, params: { id: answer } }.to_not change(Answer, :count)
       end
 
-      it 'redirect to login' do
-        delete :destroy, params: { id: answer }
+      it 'response is 401' do
+        delete :destroy, params: { id: answer }, format: :js
 
-        expect(response).to redirect_to new_user_session_path
+        expect(response).to have_http_status(401)
       end
     end
   end
