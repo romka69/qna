@@ -1,7 +1,11 @@
-div[id="answer-#{answer.id}"]
+div[class="answer-#{answer.id}"]
   p = answer.body
+  = 'Best answer' if answer.best?
+
   - if current_user&.author_of?(answer)
     = link_to 'Delete answer', answer_path(answer), method: :delete, remote: true
+    '  |
+    = link_to 'Pick best answer', pick_the_best_answer_path(answer), method: :patch, remote: true
     '  |
     = link_to 'Edit answer','#', class: 'edit-answer-link', data: { answer_id: answer.id }
 

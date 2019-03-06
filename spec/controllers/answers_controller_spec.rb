@@ -137,4 +137,33 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
   end
+
+  describe 'PATCH #pick_the_best' do
+    context 'Author of question' do
+
+      before { login(user) }
+
+      let!(:answer_best) { create :answer, question: question, author: user, best: true }
+
+      it 'pick answer' do
+        patch :pick_the_best, params: { id: answer }, format: :js
+
+        expect(Answer.where(best: true).count).to eq 1
+        expect(assigns(:answer).best).to eq true
+      end
+    end
+
+    context 'Not author' do
+      let!(:user1) { create :user }
+
+      before { login(user1) }
+
+      it 'pick answer' do
+        patch :pick_the_best, params: { id: answer }, format: :js
+
+        expect(Answer.where(best: true).count).to eq 0
+        expect(assigns(:answer).best).to eq false
+      end
+    end
+  end
 end

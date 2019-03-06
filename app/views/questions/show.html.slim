@@ -1,4 +1,7 @@
 h1 = question.title
 p = question.body
-= render 'questions/answers'
+
+.answers
+  = render question.answers.sort_by_best
+
 = render 'answers/form'

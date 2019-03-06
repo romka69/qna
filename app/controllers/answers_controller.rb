@@ -26,6 +26,17 @@ class AnswersController < ApplicationController
     end
   end
 
+  def pick_the_best
+    if current_user.author_of?(answer.question)
+      answer.set_the_best
+      @question = answer.question
+      respond_to { |format| format.js }
+      flash[:notice] = 'Answer was picked.'
+    else
+      head 401
+    end
+  end
+
   private
 
   def answer
@@ -36,7 +47,7 @@ class AnswersController < ApplicationController
     @question = Question.find(params[:question_id])
   end
 
-  helper_method :answer #, :question
+  helper_method :answer
 
   def answer_params
     params.require(:answer).permit(:body)
