@@ -10,7 +10,7 @@ feature 'User can edit his question', %q{
   given!(:question) { create :question, author: user }
 
   scenario 'Unauthenticated can not edit answer' do
-    visit questions_path
+    visit question_path(question)
 
     expect(page).to_not have_link 'Edit question'
   end
@@ -18,13 +18,13 @@ feature 'User can edit his question', %q{
   describe 'Authenticated user as author', js: true do
     background do
       sign_in user
-      visit questions_path
+      visit question_path(question)
 
       click_on 'Edit question'
     end
 
     scenario 'edit his question' do
-      within '.questions' do
+      within '.question' do
         fill_in 'Title', with: 'edited title'
         fill_in 'Body', with: 'edited body'
         click_on 'Save question'
@@ -37,7 +37,7 @@ feature 'User can edit his question', %q{
     end
 
     scenario 'edits his question with errors' do
-      within '.questions' do
+      within '.question' do
         fill_in 'Title', with: ''
         click_on 'Save question'
 
@@ -53,7 +53,7 @@ feature 'User can edit his question', %q{
 
     scenario "tries to edit other user's question" do
       sign_in user2
-      visit questions_path
+      visit question_path(question)
 
       expect(page).to_not have_link 'Edit question'
     end

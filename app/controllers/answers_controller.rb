@@ -11,18 +11,18 @@ class AnswersController < ApplicationController
   def update
     if current_user.author_of?(answer)
       answer.update(answer_params)
-      question = answer.question
       flash[:notice] = 'Answer was updated.'
+    else
+      head 403
     end
   end
 
   def destroy
     if current_user.author_of?(answer)
       answer.destroy
-      respond_to { |format| format.js }
       flash[:notice] = 'Answer was deleted.'
     else
-      head 401
+      head 403
     end
   end
 
@@ -30,10 +30,9 @@ class AnswersController < ApplicationController
     if current_user.author_of?(answer.question)
       answer.set_the_best
       @question = answer.question
-      respond_to { |format| format.js }
       flash[:notice] = 'Answer was picked.'
     else
-      head 401
+      head 403
     end
   end
 

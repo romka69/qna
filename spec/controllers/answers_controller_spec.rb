@@ -65,10 +65,10 @@ RSpec.describe AnswersController, type: :controller do
         expect { delete :destroy, params: { id: answer }, format: :js }.to_not change(Answer, :count)
       end
 
-      it 'response is 401' do
+      it 'response is 403' do
         delete :destroy, params: { id: answer }, format: :js
 
-        expect(response).to have_http_status(401)
+        expect(response).to have_http_status(403)
       end
     end
 
@@ -135,34 +135,60 @@ RSpec.describe AnswersController, type: :controller do
           patch :update, params: { id: answer, answer: { body: 'new body' } }, format: :js
         end.to_not change(answer, :body)
       end
+
+      it 'return unauthenticated' do
+        patch :update, params: { id: answer, answer: { body: 'new body' } }, format: :js
+
+        expect(response).to have_http_status(403)
+      end
     end
   end
 
   describe 'PATCH #pick_the_best' do
-    context 'Author of question' do
+    let(:pick_best) { patch :pick_the_best, params: { id: answer, best: true }, format: :js }
 
+    context 'Unauthenticated user' do
+      it 'return unauthenticated' do
+        pick_best
+        answer.reload
+
+        expect(answer).to_not be_best
+      end
+    end
+
+    context 'Author of question' do
       before { login(user) }
 
-      let!(:answer_best) { create :answer, question: question, author: user, best: true }
-
       it 'pick answer' do
-        patch :pick_the_best, params: { id: answer }, format: :js
+        pick_best
+        answer.reload
 
-        expect(Answer.where(best: true).count).to eq 1
-        expect(assigns(:answer).best).to eq true
+        expect(answer).to be_best
+      end
+
+      it 're-render template pick_the_best' do
+        pick_best
+
+        expect(response).to render_template :pick_the_best
       end
     end
 
     context 'Not author' do
-      let!(:user1) { create :user }
+      let(:user1) { create :user }
 
       before { login(user1) }
 
-      it 'pick answer' do
-        patch :pick_the_best, params: { id: answer }, format: :js
+      it 'pick best' do
+        pick_best
+        answer.reload
 
-        expect(Answer.where(best: true).count).to eq 0
-        expect(assigns(:answer).best).to eq false
+        expect(answer).to_not be_best
+      end
+
+      it 'return unauthenticated' do
+        pick_best
+
+        expect(response).to have_http_status(403)
       end
     end
   end

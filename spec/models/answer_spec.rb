@@ -15,6 +15,11 @@ RSpec.describe Answer, type: :model do
     answer.set_the_best
 
     expect(answer).to be_best
+  end
+
+  it '#set_the_best only one' do
+    answer.set_the_best
+
     expect(answer1).to_not be_best
   end
 

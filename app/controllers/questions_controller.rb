@@ -26,17 +26,19 @@ class QuestionsController < ApplicationController
     if current_user.author_of?(question)
       question.update(question_params)
       flash[:notice] = 'Question was updated.'
-      @questions = Question.all
+    else
+      head 403
     end
   end
 
   def destroy
     if current_user.author_of?(question)
       question.destroy
-      flash[:notice] = 'Question was deleted.'
-    end
 
-    redirect_to questions_path
+      redirect_to questions_path, notice: 'Question was deleted.'
+    else
+      head 403
+    end
   end
 
   private

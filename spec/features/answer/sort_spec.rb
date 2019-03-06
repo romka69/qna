@@ -59,6 +59,10 @@ feature 'User can set best answer', %q{
       within(all('.answers > div').first) do
         expect(page).to have_content 'Best answer'
       end
+
+      within(all('.answers > div').last) do
+        expect(page).to_not have_content 'Best answer'
+      end
     end
 
     scenario 'not author can not pick best answer' do
