@@ -1,4 +1,10 @@
-h1 = question.title
-p = question.body
-= render 'questions/answers'
+.question-errors
+  = render 'shared/errors', resource: question
+
+.question
+  = render 'question_part'
+
+.answers
+  = render question.answers.sort_by_best
+
 = render 'answers/form'

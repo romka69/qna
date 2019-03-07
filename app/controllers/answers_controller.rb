@@ -4,11 +4,16 @@ class AnswersController < ApplicationController
   def create
     @answer = question.answers.new(answer_params)
     @answer.author = current_user
+    @answer.save
+    flash[:notice] = 'Your answer successfully created.'
+  end
 
-    if @answer.save
-      redirect_to question, notice: 'Your answer successfully created.'
+  def update
+    if current_user.author_of?(answer)
+      answer.update(answer_params)
+      flash[:notice] = 'Answer was updated.'
     else
-      render 'questions/show'
+      head 403
     end
   end
 
@@ -16,9 +21,19 @@ class AnswersController < ApplicationController
     if current_user.author_of?(answer)
       answer.destroy
       flash[:notice] = 'Answer was deleted.'
+    else
+      head 403
     end
+  end
 
-    redirect_to question_path(answer.question)
+  def pick_the_best
+    if current_user.author_of?(answer.question)
+      answer.set_the_best
+      @question = answer.question
+      flash[:notice] = 'Answer was picked.'
+    else
+      head 403
+    end
   end
 
   private
@@ -31,7 +46,7 @@ class AnswersController < ApplicationController
     @question = Question.find(params[:question_id])
   end
 
-  helper_method :answer, :question
+  helper_method :answer
 
   def answer_params
     params.require(:answer).permit(:body)

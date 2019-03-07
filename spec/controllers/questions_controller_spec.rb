@@ -95,10 +95,10 @@ RSpec.describe QuestionsController, type: :controller do
         expect { delete :destroy, params: { id: question } }.to_not change(Question, :count)
       end
 
-      it 'redirect to index' do
+      it 'return unauthenticated' do
         delete :destroy, params: { id: question }
 
-        expect(response).to redirect_to questions_path
+        expect(response).to have_http_status(403)
       end
     end
 
@@ -111,6 +111,60 @@ RSpec.describe QuestionsController, type: :controller do
         delete :destroy, params: { id: question }
 
         expect(response).to redirect_to new_user_session_path
+      end
+    end
+  end
+
+  describe 'PATCH #update' do
+    it 'return unauthenticated' do
+      patch :update, params: { id: question, question: { title: 'new title', body: 'new body'} }, format: :js
+
+      expect(response).to have_http_status(401)
+    end
+
+    context 'With valid attributes' do
+      before { login(user) }
+
+      it 'changes question attributes' do
+        patch :update, params: { id: question, question: { title: 'new title', body: 'new body' } }, format: :js
+        question.reload
+
+        expect(question.title).to eq 'new title'
+        expect(question.body).to eq 'new body'
+      end
+
+      it 'renders update views' do
+        patch :update, params: { id: question, question: { title: 'new title', body: 'new body' } }, format: :js
+
+        expect(response).to render_template :update
+      end
+    end
+
+    context 'With invalid attributes' do
+      before { login(user) }
+
+      it 'does not change question attributes' do
+        expect do
+          patch :update, params: { id: question, question: attributes_for(:question, :invalid) }, format: :js
+        end.to_not change(question, :title)
+      end
+
+      it 'renders update views' do
+        patch :update, params: { id: question, question: attributes_for(:question, :invalid) }, format: :js
+
+        expect(response).to render_template :update
+      end
+    end
+
+    context 'Not author' do
+      let(:user1) { create :user }
+
+      before { login(user1) }
+
+      it 'update the question' do
+        expect do
+          patch :update, params: { id: question, question: { title: 'new title', body: 'new body' } }, format: :js
+        end.to_not change(question, :title)
       end
     end
   end

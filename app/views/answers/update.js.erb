@@ -1,0 +1,6 @@
+$('.answer-errors').html('<%= render 'shared/errors', resource: answer %>');
+
+<% if !answer.errors.present? %>
+  $('.flash').append('<%= render 'shared/flash' %>');
+  $('.answer-' + '<%= answer.id %>').html('<%= j render 'answers/answer_part' %>');
+<% end %>

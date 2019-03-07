@@ -11,7 +11,7 @@ feature 'User can delete answer', %q{
   given!(:question) { create(:question, author: user1) }
   given!(:answer) { create(:answer, question: question, author: user1)}
 
-  describe 'Authenticated user' do
+  describe 'Authenticated user', js: true do
     scenario 'author del question' do
       sign_in(user1)
       visit questions_path

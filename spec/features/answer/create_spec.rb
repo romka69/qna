@@ -16,15 +16,16 @@ feature 'User can create answer', %q{
       click_on question.title
     end
 
-    scenario 'write answer' do
+    scenario 'write answer', js: true do
       fill_in 'Body', with: 'Text text text'
       click_on 'Sent answer'
 
+      expect(current_path).to eq question_path(question)
       expect(page).to have_content 'Your answer successfully created.'
       expect(page).to have_content 'Text text text'
     end
 
-    scenario 'wtite answer with errors' do
+    scenario 'wtite answer with errors', js: true do
       click_on 'Sent answer'
 
       expect(page).to have_content "Body can't be blank"
