@@ -1,5 +1,6 @@
 p = answer.body
-= 'Best answer' if answer.best?
+.best-answer
+  p = 'Best answer' if answer.best?
 
 - if current_user&.author_of?(answer)
   = link_to 'Delete answer', answer_path(answer), method: :delete, remote: true
