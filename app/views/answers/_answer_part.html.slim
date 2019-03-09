@@ -4,8 +4,12 @@ p = answer.body
   p = 'Best answer' if answer.best?
 
 - if answer.files.attached?
-  - answer.files.each do |file|
-    p= link_to file.filename.to_s, url_for(file)
+  .storages
+    - answer.files.each do |file|
+      p class="storage-#{file.id}"
+        = link_to file.filename.to_s, url_for(file)
+        |  |
+        = link_to 'Delete file', file_path(file), method: :delete, remote: true if current_user&.author_of?(answer)
 
 - if current_user&.author_of?(answer)
   = link_to 'Delete answer', answer_path(answer), method: :delete, remote: true
