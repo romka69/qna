@@ -45,6 +45,16 @@ feature 'User can edit his answer', %q{
 
       expect(page).to have_content "Body can't be blank"
     end
+
+    scenario 'edit for add attached files' do
+      within '.answers' do
+        attach_file 'File', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
+        click_on 'Save answer'
+
+        expect(page).to have_link 'rails_helper.rb'
+        expect(page).to have_link 'spec_helper.rb'
+      end
+    end
   end
 
   describe 'Authenticated user as not author', js: true do
