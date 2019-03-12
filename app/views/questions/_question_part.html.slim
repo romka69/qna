@@ -3,11 +3,7 @@ p = question.body
 
 - if question.files.attached?
   .storages
-    - question.files.each do |file|
-      p class="storage-#{file.id}"
-        = link_to file.filename.to_s, url_for(file)
-        '  |
-        = link_to 'Delete file', file_path(file), method: :delete, remote: true if current_user&.author_of?(question)
+    = render 'file', question: question
 
 - if current_user&.author_of?(question)
   .settings
@@ -15,14 +11,4 @@ p = question.body
     '  |
     = link_to 'Delete question', question_path(question), method: :delete
 
-  = form_with model: question, class: 'hidden', html: {id: "edit-question-#{question.id}"} do |f|
-    p
-      = f.label :title
-      = f.text_field :title
-    p
-      = f.label :body
-      = f.text_area :body
-    p
-      = f.label :files
-      = f.file_field :files, multiple: true, direct_upload: true
-    p= f.submit 'Save question'
+  = render 'edit_form'

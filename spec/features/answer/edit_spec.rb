@@ -35,7 +35,7 @@ feature 'User can edit his answer', %q{
       end
     end
 
-    scenario 'edits his answer with errors' do
+    scenario 'edit his answer with errors' do
       within '.answers' do
         fill_in 'Body', with: ''
         click_on 'Save answer'

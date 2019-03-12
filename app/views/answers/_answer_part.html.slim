@@ -1,28 +1,19 @@
 p = answer.body
 
-.best-answer
-  p = 'Best answer' if answer.best?
+- if answer.best?
+  .best-answer
+    p = 'Best answer'
 
 - if answer.files.attached?
   .storages
-    - answer.files.each do |file|
-      p class="storage-#{file.id}"
-        = link_to file.filename.to_s, url_for(file)
-        '  |
-        = link_to 'Delete file', file_path(file), method: :delete, remote: true if current_user&.author_of?(answer)
+    = render 'file', answer: answer
 
 - if current_user&.author_of?(answer)
-  = link_to 'Delete answer', answer_path(answer), method: :delete, remote: true
-  '  |
-  = link_to 'Pick best answer', pick_the_best_answer_path(answer), method: :patch, remote: true
-  '  |
-  = link_to 'Edit answer','#', class: 'edit-answer-link', data: { answer_id: answer.id }
+  .settings
+    = link_to 'Delete answer', answer_path(answer), method: :delete, remote: true
+    '  |
+    = link_to 'Pick best answer', pick_the_best_answer_path(answer), method: :patch, remote: true
+    '  |
+    = link_to 'Edit answer','#', class: 'edit-answer-link', data: { answer_id: answer.id }
 
-  = form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}" } do |f|
-    p
-      = f.label :body
-      = f.text_area :body
-    p
-      = f.label :files
-      = f.file_field :files, multiple: true, direct_upload: true
-    p= f.submit 'Save answer'
+  = render 'answers/edit_form', answer: answer

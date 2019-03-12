@@ -36,7 +36,7 @@ feature 'User can edit his question', %q{
       end
     end
 
-    scenario 'edits his question with errors' do
+    scenario 'edit his question with errors' do
       within '.question' do
         fill_in 'Title', with: ''
         click_on 'Save question'
@@ -46,10 +46,20 @@ feature 'User can edit his question', %q{
 
       expect(page).to have_content "Title can't be blank"
     end
+
+    scenario 'edit for add attached files' do
+      within '.question' do
+        attach_file 'File', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
+        click_on 'Save question'
+
+        expect(page).to have_link 'rails_helper.rb'
+        expect(page).to have_link 'spec_helper.rb'
+      end
+    end
   end
 
   describe 'Authenticated user as not author', js: true do
-    given!(:user2) { create :user }
+    given(:user2) { create :user }
 
     scenario "tries to edit other user's question" do
       sign_in user2

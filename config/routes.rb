@@ -9,5 +9,5 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :files, on: :member, only: %i[destroy]
+  resources :files, only: %i[destroy]
 end
