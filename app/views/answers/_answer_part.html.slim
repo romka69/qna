@@ -8,6 +8,13 @@ p = answer.body
   .storages
     = render 'file', answer: answer
 
+- if answer.links.present?
+  .links
+    p Links:
+    ul
+      - answer.links.each do |link|
+        li = link_to link.name, link.url
+
 - if current_user&.author_of?(answer)
   .settings
     = link_to 'Delete answer', answer_path(answer), method: :delete, remote: true
