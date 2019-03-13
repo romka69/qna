@@ -1,0 +1,6 @@
+- answer.files.each do |file|
+  p class="storage-#{file.id}"
+    = link_to file.filename.to_s, url_for(file)
+    - if current_user&.author_of?(answer)
+      '  |
+      = link_to 'Delete file', file_path(file), method: :delete, remote: true

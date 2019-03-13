@@ -18,3 +18,7 @@
 /config/database.yml
 
 \.idea/
+
+\.env
+
+.DS_Store

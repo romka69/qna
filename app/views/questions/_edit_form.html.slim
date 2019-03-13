@@ -1,6 +1,4 @@
-= render 'shared/errors', resource: question
-
-= form_with model: question, local: true do |f|
+= form_with model: question, class: 'hidden', html: {id: "edit-question-#{question.id}"} do |f|
   p
     = f.label :title
     = f.text_field :title
@@ -10,4 +8,4 @@
   p
     = f.label :files
     = f.file_field :files, multiple: true, direct_upload: true
-  p= f.submit 'Ask'
+  p= f.submit 'Save question'
