@@ -38,16 +38,17 @@ gem 'bootsnap', '>= 1.1.0', require: false
 gem 'slim-rails'
 gem 'devise'
 gem 'jquery-rails'
-gem 'dotenv-rails'
 gem 'aws-sdk-s3', require: false
 gem 'cocoon'
 gem 'valid_url'
+gem 'octokit', '~> 4.0'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'rspec-rails', '~>3.8'
   gem 'factory_bot_rails'
+  gem 'dotenv-rails'
 end
 
 group :development do
