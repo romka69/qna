@@ -10,7 +10,7 @@ RSpec.describe Link, type: :model do
     let(:user) { create :user }
     let(:question) { create :question, author: user }
     let(:link) { create :link, linkable: question }
-    let(:link2) { create :link, :invalid, linkable: question }
+    let(:link2) { create :link, :invalid_gist, linkable: question }
 
     it 'gist url?' do
       expect(link).to be_gist_url

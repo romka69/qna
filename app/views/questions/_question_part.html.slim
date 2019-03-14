@@ -13,7 +13,10 @@ p = question.body
         - if link.gist_url?
           p = gist(link.url)
 
-        li = link_to link.name, link.url
+        li class="link-#{link.id}"
+          = link_to link.name, link.url
+          '  |
+          = link_to 'Delete link', link_path(link), method: :delete, remote: true
 
 - if current_user&.author_of?(question)
   .settings

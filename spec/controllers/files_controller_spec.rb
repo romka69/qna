@@ -29,7 +29,7 @@ RSpec.describe FilesController, type: :controller do
 
       before { login(user1) }
 
-      it 'deletes the answer' do
+      it 'deletes the file' do
         expect { delete :destroy, params: { id: question_file }, format: :js }.to_not change(ActiveStorage::Attachment, :count)
       end
 
@@ -41,7 +41,7 @@ RSpec.describe FilesController, type: :controller do
     end
 
     context 'Unauthenticated user' do
-      it 'deletes the answer' do
+      it 'deletes the file' do
         expect { delete :destroy, params: { id: question_file }, format: :js }.to_not change(ActiveStorage::Attachment, :count)
       end
 
