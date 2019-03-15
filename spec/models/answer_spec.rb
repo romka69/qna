@@ -14,22 +14,34 @@ RSpec.describe Answer, type: :model do
   let!(:answer) { create :answer, question: question, author: user }
   let!(:answer1) { create :answer, question: question, author: user }
 
-  it '#set_the_best' do
-    answer.set_the_best
+  describe '#set_the_best' do
+    context 'badge' do
+      let!(:badge) { create :badge, question: question }
 
-    expect(answer).to be_best
-  end
+      it 'take to user badge' do
+        answer.set_the_best
 
-  it '#set_the_best only one' do
-    answer.set_the_best
+        expect(badge.user).to eq answer.author
+      end
+    end
 
-    expect(answer1).to_not be_best
-  end
+    it 'best answer' do
+      answer.set_the_best
 
-  it 'sort_by_best' do
-    answer1.set_the_best
+      expect(answer).to be_best
+    end
 
-    expect(Answer.all.sort_by_best.first).to eq answer1
+    it 'only one' do
+      answer.set_the_best
+
+      expect(answer1).to_not be_best
+    end
+
+    it 'sort_by_best' do
+      answer1.set_the_best
+
+      expect(Answer.all.sort_by_best.first).to eq answer1
+    end
   end
 
   it 'have many attached files' do

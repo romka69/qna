@@ -11,7 +11,6 @@ feature 'User can see his badges' do
     visit question_path(question)
 
     click_on 'Pick best answer'
-    sleep 4
     visit badges_path
 
     expect(page).to have_content question.title

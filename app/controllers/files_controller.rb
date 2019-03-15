@@ -8,7 +8,7 @@ class FilesController < ApplicationController
       @attached_file.purge
       flash[:notice] = 'File was deleted.'
     else
-      head 403
+      head :forbidden
     end
   end
 end

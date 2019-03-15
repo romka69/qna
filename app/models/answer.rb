@@ -15,7 +15,7 @@ class Answer < ApplicationRecord
     self.transaction do
       question.answers.update_all(best: false )
       update!(best: true)
-      question.badge&.set_user(author)
+      question.badge&.update!(user: author)
     end
   end
 end

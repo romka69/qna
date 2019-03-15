@@ -13,7 +13,7 @@ class AnswersController < ApplicationController
       answer.update(answer_params)
       flash[:notice] = 'Answer was updated.'
     else
-      head 403
+      head :forbidden
     end
   end
 
@@ -22,7 +22,7 @@ class AnswersController < ApplicationController
       answer.destroy
       flash[:notice] = 'Answer was deleted.'
     else
-      head 403
+      head :forbidden
     end
   end
 
@@ -32,7 +32,7 @@ class AnswersController < ApplicationController
       @question = answer.question
       flash[:notice] = 'Answer was picked.'
     else
-      head 403
+      head :forbidden
     end
   end
 

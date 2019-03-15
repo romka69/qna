@@ -8,7 +8,7 @@ class LinksController < ApplicationController
       @link.destroy
       flash[:notice] = 'Link was deleted.'
     else
-      head 403
+      head :forbidden
     end
   end
 end

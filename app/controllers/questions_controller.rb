@@ -31,7 +31,7 @@ class QuestionsController < ApplicationController
       question.update(question_params)
       flash[:notice] = 'Question was updated.'
     else
-      head 403
+      head :forbidden
     end
   end
 
@@ -41,7 +41,7 @@ class QuestionsController < ApplicationController
 
       redirect_to questions_path, notice: 'Question was deleted.'
     else
-      head 403
+      head :forbidden
     end
   end
 

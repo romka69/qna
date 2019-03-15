@@ -5,7 +5,7 @@ RSpec.describe BadgesController, type: :controller do
   describe 'GET #index' do
     let(:user) { create :user }
     let!(:question) { create :question, author: user }
-    let!(:badge) { create :badge, :with_img, question: question, user: user }
+    let!(:badges) { create_list(:badge, 3, :with_img, question: question, user: user) }
 
     before do
       login(user)
@@ -13,7 +13,7 @@ RSpec.describe BadgesController, type: :controller do
     end
 
     it 'return badge' do
-      expect(assigns(:badges)).to eq badge
+      expect(assigns(:badges)).to eq badges
     end
 
     it 'render index view' do
