@@ -6,9 +6,13 @@ class QuestionsController < ApplicationController
   end
 
   def show
+    @answer = Answer.new
+    @answer.links.build
   end
 
   def new
+    question.links.build
+    @badge = question.build_badge
   end
 
   def create
@@ -27,7 +31,7 @@ class QuestionsController < ApplicationController
       question.update(question_params)
       flash[:notice] = 'Question was updated.'
     else
-      head 403
+      head :forbidden
     end
   end
 
@@ -37,7 +41,7 @@ class QuestionsController < ApplicationController
 
       redirect_to questions_path, notice: 'Question was deleted.'
     else
-      head 403
+      head :forbidden
     end
   end
 
@@ -50,6 +54,8 @@ class QuestionsController < ApplicationController
   helper_method :question
 
   def question_params
-    params.require(:question).permit(:title, :body, files: [])
+    params.require(:question).permit(:title, :body, files: [],
+                                     links_attributes: %i[name url id _destroy],
+                                     badge_attributes: %i[name img])
   end
 end

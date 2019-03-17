@@ -5,6 +5,19 @@ p = question.body
   .storages
     = render 'file', question: question
 
+- if question.links.present?
+  .links
+    p Links:
+    ul
+      - question.links.each do |link|
+        - if link.gist_url?
+          p = gist(link.url)
+
+        li class="link-#{link.id}"
+          = link_to link.name, link.url
+          '  |
+          = link_to 'Delete link', link_path(link), method: :delete, remote: true
+
 - if current_user&.author_of?(question)
   .settings
     = link_to 'Edit question','#', class: 'edit-question-link', data: { question_id: question.id }

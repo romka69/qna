@@ -16,6 +16,8 @@ feature 'User can edit his question', %q{
   end
 
   describe 'Authenticated user as author', js: true do
+    given!(:url) { 'http://ya.ru' }
+
     background do
       sign_in user
       visit question_path(question)
@@ -54,6 +56,19 @@ feature 'User can edit his question', %q{
 
         expect(page).to have_link 'rails_helper.rb'
         expect(page).to have_link 'spec_helper.rb'
+      end
+    end
+
+    scenario 'edit for add link' do
+      within '.question' do
+        click_on 'Add link'
+
+        fill_in 'Link name', with: 'My href'
+        fill_in 'Url', with: url
+
+        click_on 'Save question'
+
+        expect(page).to have_link 'My href', href: url
       end
     end
   end
