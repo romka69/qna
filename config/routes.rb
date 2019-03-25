@@ -3,8 +3,15 @@ Rails.application.routes.draw do
 
   root to: 'questions#index'
 
-  resources :questions, except: %i[edit] do
-    resources :answers, shallow: true, except: %i[edit] do
+  concern :votable do
+    member do
+      post :vote_up
+      post :vote_down
+    end
+  end
+
+  resources :questions, except: %i[edit], concerns: [:votable] do
+    resources :answers, shallow: true, except: %i[edit], concerns: [:votable] do
       patch :pick_the_best, on: :member
     end
   end
