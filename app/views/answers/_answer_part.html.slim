@@ -1,4 +1,5 @@
-= render 'votes/vote', resource: answer
+- if user_signed_in?
+  = render 'votes/vote', resource: answer
 
 p = answer.body
 

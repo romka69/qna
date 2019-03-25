@@ -1,12 +1,18 @@
-require 'rails_helper'
-
 RSpec.shared_examples 'voted' do |obj|
   let(:user) { create :user }
+  let(:user2) { create :user }
   let(:model) { create(obj, author: user) }
 
-  describe 'PATCH #vote_up' do
+  before do
+    if :model.is_a?(Answer)
+      let(:question) { create :question, author: user }
+      let!(:model) { create(obj, author: user, question: question) }
+    end
+  end
+
+  describe 'POST #vote_up' do
     it 'user can vote' do
-      login(user)
+      login(user2)
 
       expect do
         post :vote_up, params: { id: model }, format: :json
@@ -21,9 +27,9 @@ RSpec.shared_examples 'voted' do |obj|
     end
   end
 
-  describe 'PATCH #vote_down' do
+  describe 'POST #vote_down' do
     it 'user can vote' do
-      login(user)
+      login(user2)
 
       expect do
         post :vote_down, params: { id: model }, format: :json

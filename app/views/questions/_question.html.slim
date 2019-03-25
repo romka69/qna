@@ -1,2 +1,5 @@
-= render 'votes/vote', resource: question
-p = link_to question.title, question_path(question)
+div class="question question-#{question.id}"
+  - if user_signed_in?
+    = render 'votes/vote', resource: question
+
+  = link_to question.title, question_path(question)

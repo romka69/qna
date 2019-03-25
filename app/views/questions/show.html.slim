@@ -1,7 +1,7 @@
 .question-errors
   = render 'shared/errors', resource: question
 
-.question
+div class = "question question-#{question.id}"
   = render 'question_part'
 
 .answers

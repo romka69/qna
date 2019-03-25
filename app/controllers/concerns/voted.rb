@@ -20,10 +20,12 @@ module Voted
   end
 
   def make_vote(method)
-    return :forbidden if current_user&.author_of?(obj_votable)
+    obj_votable
+
+    return :forbidden if current_user&.author_of?(@obj)
 
     if @obj.send(method, current_user)
-      render json: obj.score_resource
+      render json: { resourceId: @obj.id, resourceScore: @obj.score_resource }
     else
       head :forbidden
     end

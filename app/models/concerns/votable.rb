@@ -5,39 +5,40 @@ module Votable
     has_many :votes, as: :votable, dependent: :destroy
   end
 
+  SCORES = { up: 1, down: -1 }.freeze
+
   def score_resource
     votes.sum(:score)
   end
 
   def vote_up(user)
-    if user_pass?(user, :up)
-      @vote_user.update!(score: 0)
-    elsif !@vote_user.present?
-      votes.create(user: user, score: 1)
-    end
+    make_vote(user, :up)
   end
 
   def vote_down(user)
-    if user_pass?(user, :down)
-      @vote_user.update!(score: 0)
-    elsif !@vote_user.present?
-      votes.create(user: user, score: -1)
-    end
+    make_vote(user, :down)
   end
 
   private
 
   def find_user(user)
-    @vote_user ||= votes.find_by(user: user.id)
+    @voted_user = votes.find_by(user: user.id)
   end
 
-  def user_pass?(user, option)
-    find_user(user)
-
+  def can_revote?(option)
     if option == :up
-      return false if user.author_of?(self) || @vote_user.score > 0
+      return true if @voted_user == -1
     elsif option == :down
-      return false if user.author_of?(self) || @vote_user.score < 0
+      return true if @voted_user == 1
     end
+  end
+
+  def make_vote(user, option)
+    find_user(user)
+    return false if user.author_of?(self)
+
+    return votes.create(user: user, score: SCORES[option]) unless @voted_user.present?
+
+    @voted_user.update!(score: 0) if can_revote?(option)
   end
 end
