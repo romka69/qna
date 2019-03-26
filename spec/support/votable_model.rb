@@ -1,16 +1,8 @@
-RSpec.shared_examples 'votable' do |obj|
+RSpec.shared_examples 'votable' do
   let(:user) { create :user }
   let!(:user2) { create :user }
   let!(:user3) { create :user }
   let!(:user4) { create :user }
-  let(:model) { create(obj, author: user) }
-
-  before do
-    if :model.is_a?(Answer)
-      let(:question) { create :question, author: user }
-      let!(:model) { create(obj, author: user, question: question) }
-    end
-  end
 
   it '#vote_up' do
     model.vote_up(user2)

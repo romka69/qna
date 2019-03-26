@@ -193,5 +193,7 @@ RSpec.describe AnswersController, type: :controller do
     end
   end
 
-  include_examples 'voted', :answer
+  it_behaves_like 'voted' do
+    let(:model) { create :answer, question: question, author: user }
+  end
 end

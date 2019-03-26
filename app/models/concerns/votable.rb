@@ -27,9 +27,9 @@ module Votable
 
   def can_revote?(option)
     if option == :up
-      return true if @voted_user == -1
+      return true if @voted_user.score == -1
     elsif option == :down
-      return true if @voted_user == 1
+      return true if @voted_user.score == 1
     end
   end
 
@@ -39,6 +39,6 @@ module Votable
 
     return votes.create(user: user, score: SCORES[option]) unless @voted_user.present?
 
-    @voted_user.update!(score: 0) if can_revote?(option)
+    @voted_user.destroy if can_revote?(option)
   end
 end

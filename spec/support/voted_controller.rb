@@ -1,14 +1,6 @@
-RSpec.shared_examples 'voted' do |obj|
+RSpec.shared_examples 'voted' do
   let(:user) { create :user }
   let(:user2) { create :user }
-  let(:model) { create(obj, author: user) }
-
-  before do
-    if :model.is_a?(Answer)
-      let(:question) { create :question, author: user }
-      let!(:model) { create(obj, author: user, question: question) }
-    end
-  end
 
   describe 'POST #vote_up' do
     it 'user can vote' do
