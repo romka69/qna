@@ -29,7 +29,7 @@ feature 'User can vote for resource', %q{
   describe 'Authenticated user not author', js: true do
     background do
       sign_in(user2)
-      visit questions_path
+      visit question_path(question)
     end
 
     scenario 'can vote up' do
