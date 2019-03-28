@@ -25,7 +25,9 @@ module Voted
     return head :forbidden if current_user&.author_of?(@obj)
 
     if @obj.send(method, current_user)
-      render json: { resourceName: controller_name[0...-1], resourceId: @obj.id, resourceScore: @obj.score_resource }
+      render json: { resourceName: @obj.class.name.downcase,
+                     resourceId: @obj.id,
+                     resourceScore: @obj.score_resource }
     else
       head :forbidden
     end
