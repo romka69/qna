@@ -1,6 +1,8 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
 
+  include Voted
+
   def create
     @answer = question.answers.new(answer_params)
     @answer.author = current_user

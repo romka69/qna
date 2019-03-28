@@ -1,0 +1,10 @@
+.vote-block
+  p
+    = link_to '^', polymorphic_path(resource, action: :vote_up),
+            method: :post, class: 'vote', remote: true unless current_user&.author_of?(resource)
+  p.score
+    = resource.score_resource
+
+  p
+    = link_to 'v', polymorphic_path(resource, action: :vote_down),
+            method: :post, class: 'vote', remote: true unless current_user&.author_of?(resource)
