@@ -1,6 +1,8 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
 
+  after_action :publish_answer, only: %i[create]
+
   include Voted
 
   def create
@@ -52,5 +54,25 @@ class AnswersController < ApplicationController
 
   def answer_params
     params.require(:answer).permit(:body, files: [], links_attributes: %i[name url id _destroy])
+  end
+
+  def publish_answer
+    return if @answer.errors.any?
+
+    files = []
+    answer.files.each do |file|
+      files << { id: file.id, url: url_for(file), name: file.filename.to_s }
+    end
+
+    links = []
+    answer.links.each do |link|
+      hash = { id: link.id, name: link.name, url: link.url }
+      hash[:gist] = link.gist(link.url) if link.gist_url?
+      links << hash
+    end
+
+    ActionCable.server.broadcast(
+        "answers-#{@answer.question.id}", { answer: @answer, links: links, files: files }
+    )
   end
 end

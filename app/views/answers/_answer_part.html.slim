@@ -21,8 +21,9 @@ p = answer.body
 
         li class="link-#{link.id}"
           = link_to link.name, link.url
-          '  |
-          = link_to 'Delete link', link_path(link), method: :delete, remote: true
+          - if current_user&.author_of?(answer)
+            '  |
+            = link_to 'Delete link', link_path(link), method: :delete, remote: true
 
 - if current_user&.author_of?(answer)
   .settings
