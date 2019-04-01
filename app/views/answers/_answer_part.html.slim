@@ -34,3 +34,6 @@ p = answer.body
     = link_to 'Edit answer','#', class: 'edit-answer-link', data: { answer_id: answer.id }
 
   = render 'answers/edit_form', answer: answer
+
+.comment-block
+  = render 'comments/form', resource: answer

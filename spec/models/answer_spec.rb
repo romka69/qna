@@ -52,4 +52,8 @@ RSpec.describe Answer, type: :model do
   it_behaves_like 'votable' do
     let(:model) { create :answer, question: question, author: user }
   end
+
+  it_behaves_like 'commentable' do
+    let(:model) { create :comment, author: user }
+  end
 end

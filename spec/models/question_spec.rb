@@ -23,4 +23,9 @@ RSpec.describe Question, type: :model do
     let(:user_model) { create :user }
     let(:model) { create :question, author: user }
   end
+
+  it_behaves_like 'commentable' do
+    let(:user_model) { create :user }
+    let(:model) { create :comment, author: user }
+  end
 end
