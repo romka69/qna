@@ -11,13 +11,11 @@ Rails.application.routes.draw do
   end
 
   concern :commentable do
-    member do
-      post :create_comment
-    end
+    resource :comments, only: %i[create]
   end
 
-  resources :questions, except: %i[edit], concerns: %i[votable commentable], defaults: { commentable: 'question' } do
-    resources :answers, shallow: true, except: %i[edit], concerns: %i[votable commentable], defaults: { commentable: 'answer' } do
+  resources :questions, except: %i[edit], concerns: %i[votable commentable] do
+    resources :answers, shallow: true, except: %i[edit], concerns: %i[votable commentable] do
       patch :pick_the_best, on: :member
     end
   end

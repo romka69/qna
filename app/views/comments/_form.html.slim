@@ -4,8 +4,7 @@
 .comment-errors
 
 - if user_signed_in?
-  = form_with model: [resource],
-          url: polymorphic_path([:create_comment, resource]),
+  = form_with model: [resource, Comment.new],
           method: :post,
           class: 'new-comment' do |f|
     p
