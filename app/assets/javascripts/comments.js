@@ -22,15 +22,13 @@ $(document).on('turbolinks:load', function () {
         },
         received: function(data) {
             if (gon.user_id != data.comment.author_id) {
-                var resourceName = data.comment.commentable_type.toLowerCase();
+                var resourceName = data.comment.commentable_type;
                 var resourceId = data.comment.commentable_id;
-                var newComment = JST['templates/comment']({
-                    comment: data.comment,
-                });
+                var newComment = JST['templates/comment']({comment: data.comment});
 
-                if (resourceName == 'question') {
+                if (resourceName == 'Question') {
                     $('.question .comment-block .comments').append(newComment);
-                } else if (resourceName == 'answer') {
+                } else if (resourceName == 'Answer') {
                     $('.answers .answer-' + resourceId + ' .comment-block .comments').append(newComment);
                 }
             }

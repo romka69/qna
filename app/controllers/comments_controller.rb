@@ -25,11 +25,15 @@ class CommentsController < ApplicationController
     params.require(:comment).permit(:comment_body)
   end
 
+  def room_id
+    @comment.commentable_type == "Question" ? @comment.commentable_id : @comment.commentable.question_id
+  end
+
   def publish_comment
     return if @comment.errors.any?
 
     ActionCable.server.broadcast(
-        "comments-#{@comment.commentable_id}", { comment: @comment }
+        "comments-#{room_id}", { comment: @comment }
     )
   end
 end
