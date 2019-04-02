@@ -35,4 +35,28 @@ feature 'User can comment for resource', %q{
       expect(page).to have_content "body can't be blank"
     end
   end
+
+  describe 'multiple sessions', js: true do
+    scenario 'comments appears on another users page' do
+      Capybara.using_session('user') do
+        sign_in(user)
+        visit question_path(question)
+      end
+
+      Capybara.using_session('guest') do
+        visit question_path(question)
+      end
+
+      Capybara.using_session('user') do
+        fill_in 'Comment body', with: 'Test comment'
+        click_on 'Sent comment'
+
+        expect(page).to have_content 'Test comment'
+      end
+
+      Capybara.using_session('guest') do
+        expect(page).to have_content 'Test comment'
+      end
+    end
+  end
 end

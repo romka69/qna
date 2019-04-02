@@ -1,6 +1,10 @@
 module Commented
   extend ActiveSupport::Concern
 
+  included do
+    after_action :publish_comment, only: %i[create_comment]
+  end
+
   def create_comment
     make_comment
   end
@@ -22,13 +26,21 @@ module Commented
   def make_comment
     obj_commentable
 
-    comment = @obj.comments.new(body: comment_params[:comment_body])
-    comment.author = current_user
+    @comment = @obj.comments.new(body: comment_params[:comment_body])
+    @comment.author = current_user
 
-    if comment.save
-      render json: comment
+    if @comment.save
+      render json: @comment
     else
-      render json: comment.errors, status: :unprocessable_entity
+      render json: @comment.errors, status: :unprocessable_entity
     end
+  end
+
+  def publish_comment
+    return if @comment.errors.any?
+
+    ActionCable.server.broadcast(
+        "comments-#{@comment.commentable_id}", { comment: @comment }
+    )
   end
 end
