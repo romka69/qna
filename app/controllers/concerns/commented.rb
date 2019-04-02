@@ -31,18 +31,4 @@ module Commented
       render json: comment.errors, status: :unprocessable_entity
     end
   end
-
-  def make_vote(method)
-    obj_votable
-
-    return head :forbidden if current_user&.author_of?(@obj)
-
-    if @obj.send(method, current_user)
-      render json: { resourceName: @obj.class.name.downcase,
-                     resourceId: @obj.id,
-                     resourceScore: @obj.score_resource }
-    else
-      head :forbidden
-    end
-  end
 end
