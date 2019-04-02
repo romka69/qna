@@ -8,7 +8,7 @@ $(document).on('turbolinks:load', function () {
 
     App.cable.subscriptions.create('AnswerChannel', {
         connected: function() {
-            var questionId = $('.question')[0].classList[1].slice(-1);
+            var questionId = $('.question').data('resource-id');
             return this.perform('follow', {question_id: questionId});
         },
         received: function(data) {
