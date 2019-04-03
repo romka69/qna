@@ -42,6 +42,35 @@ feature 'User can create answer', %q{
     end
   end
 
+  describe 'multiple sessions', js: true do
+    scenario 'answer appears on another users page' do
+      Capybara.using_session('user') do
+        sign_in(user)
+        visit question_path(question)
+      end
+
+      Capybara.using_session('guest') do
+        visit question_path(question)
+      end
+
+      Capybara.using_session('user') do
+        fill_in 'Body', with: 'text text text'
+
+        attach_file 'File', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
+        click_on 'Sent answer'
+
+        expect(page).to have_link 'rails_helper.rb'
+        expect(page).to have_link 'spec_helper.rb'
+      end
+
+      Capybara.using_session('guest') do
+        expect(page).to have_content 'text text text'
+        expect(page).to have_link 'rails_helper.rb'
+        expect(page).to have_link 'spec_helper.rb'
+      end
+    end
+  end
+
   scenario 'Unauthenticated user tries to ask a question' do
     visit question_path(question)
     fill_in 'Body', with: 'Text text text'

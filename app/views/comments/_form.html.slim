@@ -1,0 +1,13 @@
+.comments
+  = render resource.comments
+
+.comment-errors
+
+- if user_signed_in?
+  = form_with model: [resource, Comment.new],
+          method: :post,
+          class: 'new-comment' do |f|
+    p
+      = f.label :comment_body
+      = f.text_area :comment_body
+    p= f.submit 'Sent comment'

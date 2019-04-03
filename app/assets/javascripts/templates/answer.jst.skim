@@ -1,0 +1,26 @@
+div class="answer-#{@answer.id}"
+  - if gon.user_id?
+    .vote-block
+      p
+        a class='vote' data-remote='true' data-method='post' href="/answers/#{@answer.id}/vote_up"
+      p.score 0
+      p
+        a class='vote' data-remote='true' data-method='post' href="/answers/#{@answer.id}/vote_down"
+
+  p = @answer.body
+
+  - if @files.length != 0
+    .storages
+      - for file in @files
+        p class="storage-#{file.id}"
+          a href="#{file.url}" #{file.name}
+
+  - if @links.length != 0
+    .links
+      p Links:
+      ul
+        - for link in @links
+          - if link.gist
+            p = link.gist
+          li class="link-#{link.id}"
+            a href="#{link.url}" #{link.name}

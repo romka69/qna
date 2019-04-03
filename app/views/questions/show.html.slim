@@ -1,7 +1,7 @@
 .question-errors
   = render 'shared/errors', resource: question
 
-div class = "question question-#{question.id}"
+div class = "question question-#{question.id}" data-resource-id=question.id
   = render 'question_part'
 
 .answers

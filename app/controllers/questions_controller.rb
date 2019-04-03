@@ -1,6 +1,8 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
 
+  after_action :publish_question, only: %i[create]
+
   include Voted
 
   def index
@@ -10,6 +12,7 @@ class QuestionsController < ApplicationController
   def show
     @answer = Answer.new
     @answer.links.build
+    @comment = Comment.new
   end
 
   def new
@@ -59,5 +62,17 @@ class QuestionsController < ApplicationController
     params.require(:question).permit(:title, :body, files: [],
                                      links_attributes: %i[name url id _destroy],
                                      badge_attributes: %i[name img])
+  end
+
+  def publish_question
+    return if @question.errors.any?
+
+    ActionCable.server.broadcast(
+        'questions',
+        ApplicationController.render(
+            partial: 'questions/question',
+            locals: { question: question }
+        )
+    )
   end
 end
