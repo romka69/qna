@@ -16,9 +16,8 @@ class CommentsController < ApplicationController
   private
 
   def commentable
-    return Question.find(params[:question_id]) if params[:question_id]
-
-    Answer.find(params[:answer_id]) if params[:answer_id]
+    klass = [Question, Answer].detect{ |c| params["#{c.name.underscore}_id"] }
+    klass.find(params["#{klass.name.underscore}_id"])
   end
 
   def comment_params
@@ -26,7 +25,7 @@ class CommentsController < ApplicationController
   end
 
   def room_id
-    @comment.commentable_type == "Question" ? @comment.commentable_id : @comment.commentable.question_id
+    commentable.is_a?(Question) ? commentable.id : commentable.question.id
   end
 
   def publish_comment
