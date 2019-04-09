@@ -25,5 +25,13 @@ Rails.application.routes.draw do
   resources :links, only: %i[destroy]
   resources :badges, only: %i[index]
 
+  namespace :api do
+    namespace :v1 do
+      resource :profiles, only: [] do
+        get :me, on: :collection
+      end
+    end
+  end
+
   mount ActionCable.server => '/cable'
 end
