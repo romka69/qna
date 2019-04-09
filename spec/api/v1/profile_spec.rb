@@ -11,7 +11,7 @@ describe 'Profiles API', type: :request do
       let(:method) { :get }
     end
 
-    context 'authorized' do
+    context 'Authorized' do
       let(:me) { create :user }
       let(:access_token) { create :access_token, resource_owner_id: me.id }
 
@@ -40,15 +40,19 @@ describe 'Profiles API', type: :request do
       let(:method) { :get }
     end
 
-    context 'authorized' do
+    context 'Authorized' do
       let(:access_token) { create :access_token }
       let!(:users) { create_list :user, 2 }
       let(:user) { users.first }
       let(:user_response) { json['users'].first }
 
-      before { get api_path, params: { access_token: access_token.token },headers: headers }
+      before { get api_path, params: { access_token: access_token.token }, headers: headers }
 
       it_behaves_like 'Request status'
+
+      it_behaves_like 'Returns list of' do
+        let(:json_resource) { json['users'] }
+      end
 
       it_behaves_like 'Returns fields' do
         let(:fields) { %w[id email admin created_at updated_at] }
