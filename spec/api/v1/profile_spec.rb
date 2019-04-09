@@ -21,7 +21,7 @@ describe 'Profiles API', type: :request do
 
       it_behaves_like 'Returns fields' do
         let(:fields) { %w[id email admin created_at updated_at] }
-        let(:resource_response) { json }
+        let(:resource_response) { json['user'] }
         let(:resource_name) { me }
       end
 
@@ -29,6 +29,31 @@ describe 'Profiles API', type: :request do
         %w[password encrypted_password].each do |attr|
           expect(json).to_not have_key(attr)
         end
+      end
+    end
+  end
+
+  describe 'GET /api/v1/profiles' do
+    let(:api_path) { '/api/v1/profiles' }
+
+    it_behaves_like 'API Authorizable' do
+      let(:method) { :get }
+    end
+
+    context 'authorized' do
+      let(:access_token) { create :access_token }
+      let!(:users) { create_list :user, 2 }
+      let(:user) { users.first }
+      let(:user_response) { json['users'].first }
+
+      before { get api_path, params: { access_token: access_token.token },headers: headers }
+
+      it_behaves_like 'Request status'
+
+      it_behaves_like 'Returns fields' do
+        let(:fields) { %w[id email admin created_at updated_at] }
+        let(:resource_response) { user_response }
+        let(:resource_name) { user }
       end
     end
   end
