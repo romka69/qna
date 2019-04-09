@@ -12,11 +12,12 @@ describe 'Questions API', type: :request do
     end
 
     context 'Authorized' do
-      let(:access_token) { create :access_token }
       let!(:questions) { create_list(:question, 2, author: create(:user)) }
       let(:question) { questions.first }
       let(:question_response) { json['questions'].first }
       let!(:answers) { create_list(:answer, 2, question: question, author: create(:user)) }
+
+      let(:access_token) { create :access_token }
 
       before { get api_path, params: { access_token: access_token.token },headers: headers }
 
@@ -49,7 +50,7 @@ describe 'Questions API', type: :request do
         end
 
         it_behaves_like 'Returns fields' do
-          let(:fields) { %w[id body author_id created_at updated_at] }
+          let(:fields) { %w[id body question_id created_at updated_at] }
           let(:resource_response) { answer_response }
           let(:resource_name) { answer }
         end
@@ -63,7 +64,7 @@ describe 'Questions API', type: :request do
                              files: fixture_file_upload("#{Rails.root}/spec/rails_helper.rb") }
     let!(:comment) { create :question_comment, commentable: question, author: user }
     let!(:link) { create :link, linkable: question }
-    let!(:file) { fixture_file_upload("#{Rails.root}/spec/rails_helper.rb") }
+
     let(:api_path) { "/api/v1/questions/#{question.id}" }
 
     it_behaves_like 'API Authorizable' do
