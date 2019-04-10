@@ -128,27 +128,16 @@ describe 'Questions API', type: :request do
   describe 'POST /api/v1/questions/' do
     let(:api_path) { "/api/v1/questions" }
     let(:access_token) { create :access_token }
+    let(:headers) { { "ACCEPT" => "application/json" } }
 
-    # second test in shared is fail but work another
     it_behaves_like 'API Authorizable' do
       let(:method) { :post }
-    end
-
-    it 'returns 401 status if there is no access_token' do
-      post api_path, params: { question: attributes_for(:question) }
-      expect(response.status).to eq 401
-    end
-
-    # another work
-    it 'returns 401 status if access_token is invalid' do
-      post api_path, params: { access_token: '12345', question: attributes_for(:question) }
-      expect(response.status).to eq 401
     end
 
     context 'Create question valid attributes' do
       before { post api_path, params: {
           access_token: access_token.token,
-          question: attributes_for(:question) } }
+          question: attributes_for(:question) }, headers: headers }
 
       it_behaves_like 'Request status 201'
 
@@ -166,7 +155,7 @@ describe 'Questions API', type: :request do
     context 'Create question invalid attributes' do
       before { post api_path, params: {
           access_token: access_token.token,
-          question: attributes_for(:question, :invalid) } }
+          question: attributes_for(:question, :invalid) }, headers: headers }
 
       it 'return 422' do
         expect(response.status).to eq 422
@@ -186,27 +175,16 @@ describe 'Questions API', type: :request do
 
     let(:api_path) { "/api/v1/questions/#{question.id}" }
     let(:access_token) { create :access_token }
+    let(:headers) { { "ACCEPT" => "application/json" } }
 
-    # second test in shared is fail but work another
     it_behaves_like 'API Authorizable' do
       let(:method) { :patch }
-    end
-
-    it 'returns 401 status if there is no access_token' do
-      patch api_path, params: { question: attributes_for(:question) }
-      expect(response.status).to eq 401
-    end
-
-    # another work
-    it 'returns 401 status if access_token is invalid' do
-      patch api_path, params: { access_token: '12345', question: attributes_for(:question) }
-      expect(response.status).to eq 401
     end
 
     context 'Update question valid attributes' do
       before { patch api_path, params: {
           access_token: access_token.token,
-          question: { title: 'Edit title' } } }
+          question: { title: 'Edit title' } }, headers: headers }
 
       it_behaves_like 'Request status success'
 
@@ -224,7 +202,7 @@ describe 'Questions API', type: :request do
     context 'Update question invalid attributes' do
       before { patch api_path, params: {
           access_token: access_token.token,
-          question: { title: nil } } }
+          question: { title: nil } }, headers: headers }
 
       it 'return 422' do
         expect(response.status).to eq 422
@@ -244,27 +222,16 @@ describe 'Questions API', type: :request do
 
     let(:api_path) { "/api/v1/questions/#{question.id}" }
     let(:access_token) { create :access_token }
+    let(:headers) { { "ACCEPT" => "application/json" } }
 
-    # second test in shared is fail but work another
     it_behaves_like 'API Authorizable' do
       let(:method) { :delete }
-    end
-
-    it 'returns 401 status if there is no access_token' do
-      delete api_path, params: { question: attributes_for(:question) }
-      expect(response.status).to eq 401
-    end
-
-    # another work
-    it 'returns 401 status if access_token is invalid' do
-      delete api_path, params: { access_token: '12345', question: attributes_for(:question) }
-      expect(response.status).to eq 401
     end
 
     context 'Authorized' do
       before { delete api_path, params: {
           access_token: access_token.token,
-          question: question } }
+          question: question }, headers: headers }
 
       it_behaves_like 'Request status success'
 
