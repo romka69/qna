@@ -17,7 +17,7 @@ describe 'Profiles API', type: :request do
 
       before { get api_path, params: { access_token: access_token.token },headers: headers }
 
-      it_behaves_like 'Request status'
+      it_behaves_like 'Request status success'
 
       it_behaves_like 'Returns fields' do
         let(:fields) { %w[id email admin created_at updated_at] }
@@ -48,7 +48,7 @@ describe 'Profiles API', type: :request do
 
       before { get api_path, params: { access_token: access_token.token }, headers: headers }
 
-      it_behaves_like 'Request status'
+      it_behaves_like 'Request status success'
 
       it_behaves_like 'Returns list of' do
         let(:json_resource) { json['users'] }

@@ -1,5 +1,5 @@
-shared_examples_for 'Request status' do
-  it 'return 200' do
+shared_examples_for 'Request status success' do
+  it 'return success' do
     expect(response).to be_successful
   end
 end

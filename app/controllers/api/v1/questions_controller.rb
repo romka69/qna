@@ -1,5 +1,5 @@
 class Api::V1::QuestionsController < Api::V1::BaseController
-  #authorize_resource
+  authorize_resource
 
   def index
     questions = Question.all
@@ -17,7 +17,7 @@ class Api::V1::QuestionsController < Api::V1::BaseController
     if question.save
       render json: question, status: :created
     else
-      render json: question.errors, status: :forbidden
+      render json: question.errors, status: :unprocessable_entity
     end
   end
 
@@ -25,16 +25,12 @@ class Api::V1::QuestionsController < Api::V1::BaseController
     if question.update(question_params)
       render json: question, status: :ok
     else
-      render json: question.errors, status: :forbidden
+      render json: question.errors, status: :unprocessable_entity
     end
   end
 
   def destroy
-    if question.destroy
-      render json: 'Question deleted', status: :gone
-    else
-      render json: 'Something wrong', status: :forbidden
-    end
+    question.destroy
   end
 
   private

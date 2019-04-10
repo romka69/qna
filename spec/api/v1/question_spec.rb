@@ -21,7 +21,7 @@ describe 'Questions API', type: :request do
 
       before { get api_path, params: { access_token: access_token.token },headers: headers }
 
-      it_behaves_like 'Request status'
+      it_behaves_like 'Request status success'
 
       it_behaves_like 'Returns list of' do
         let(:json_resource) { json['questions'] }
@@ -77,7 +77,7 @@ describe 'Questions API', type: :request do
 
       before { get api_path, params: { access_token: access_token.token },headers: headers }
 
-      it_behaves_like 'Request status'
+      it_behaves_like 'Request status success'
 
       it_behaves_like 'Returns fields' do
         let(:fields) { %w[id title body created_at updated_at] }
@@ -129,6 +129,7 @@ describe 'Questions API', type: :request do
     let(:api_path) { "/api/v1/questions" }
     let(:access_token) { create :access_token }
 
+    # second test in shared is fail but work another
     it_behaves_like 'API Authorizable' do
       let(:method) { :post }
     end
@@ -138,6 +139,7 @@ describe 'Questions API', type: :request do
       expect(response.status).to eq 401
     end
 
+    # another work
     it 'returns 401 status if access_token is invalid' do
       post api_path, params: { access_token: '12345', question: attributes_for(:question) }
       expect(response.status).to eq 401
@@ -148,20 +150,127 @@ describe 'Questions API', type: :request do
           access_token: access_token.token,
           question: attributes_for(:question) } }
 
-
       it_behaves_like 'Request status 201'
 
       it 'add question in db' do
         expect(Question.count).to eq 1
       end
 
-      it 'return fields' do
-        %w[id title body author_id created_at updated_at].each do |attr|
+      it 'return fields of new object' do
+        %w[id title body created_at updated_at].each do |attr|
           expect(json['question'].has_key?(attr)).to be_truthy
         end
       end
     end
 
-    context 'Create question invalid attributes'
+    context 'Create question invalid attributes' do
+      before { post api_path, params: {
+          access_token: access_token.token,
+          question: attributes_for(:question, :invalid) } }
+
+      it 'return 422' do
+        expect(response.status).to eq 422
+      end
+
+      it 'return error in object' do
+        %w[title].each do |attr|
+          expect(json.has_key?(attr)).to be_truthy
+        end
+      end
+    end
+  end
+
+  describe 'PATCH /api/v1/questions/:id' do
+    let(:user) { create :user }
+    let!(:question) { create :question, author: user }
+
+    let(:api_path) { "/api/v1/questions/#{question.id}" }
+    let(:access_token) { create :access_token }
+
+    # second test in shared is fail but work another
+    it_behaves_like 'API Authorizable' do
+      let(:method) { :patch }
+    end
+
+    it 'returns 401 status if there is no access_token' do
+      patch api_path, params: { question: attributes_for(:question) }
+      expect(response.status).to eq 401
+    end
+
+    # another work
+    it 'returns 401 status if access_token is invalid' do
+      patch api_path, params: { access_token: '12345', question: attributes_for(:question) }
+      expect(response.status).to eq 401
+    end
+
+    context 'Update question valid attributes' do
+      before { patch api_path, params: {
+          access_token: access_token.token,
+          question: { title: 'Edit title' } } }
+
+      it_behaves_like 'Request status success'
+
+      it 'return fields with modifier data' do
+        %w[id title body created_at updated_at].each do |attr|
+          expect(json['question'].has_key?(attr)).to be_truthy
+        end
+      end
+
+      it 'check modifier field' do
+        expect(json['question']['title']).to eq 'Edit title'
+      end
+    end
+
+    context 'Update question invalid attributes' do
+      before { patch api_path, params: {
+          access_token: access_token.token,
+          question: { title: nil } } }
+
+      it 'return 422' do
+        expect(response.status).to eq 422
+      end
+
+      it 'return error in object' do
+        %w[title].each do |attr|
+          expect(json.has_key?(attr)).to be_truthy
+        end
+      end
+    end
+  end
+
+  describe 'DELETE /api/v1/questions/:id' do
+    let(:user) { create :user }
+    let!(:question) { create :question, author: user }
+
+    let(:api_path) { "/api/v1/questions/#{question.id}" }
+    let(:access_token) { create :access_token }
+
+    # second test in shared is fail but work another
+    it_behaves_like 'API Authorizable' do
+      let(:method) { :delete }
+    end
+
+    it 'returns 401 status if there is no access_token' do
+      delete api_path, params: { question: attributes_for(:question) }
+      expect(response.status).to eq 401
+    end
+
+    # another work
+    it 'returns 401 status if access_token is invalid' do
+      delete api_path, params: { access_token: '12345', question: attributes_for(:question) }
+      expect(response.status).to eq 401
+    end
+
+    context 'Authorized' do
+      before { delete api_path, params: {
+          access_token: access_token.token,
+          question: question } }
+
+      it_behaves_like 'Request status success'
+
+      it 'del question in db' do
+        expect(Question.count).to eq 0
+      end
+    end
   end
 end

@@ -23,7 +23,7 @@ describe 'Answers API', type: :request do
 
       before { get api_path, params: { access_token: access_token.token },headers: headers }
 
-      it_behaves_like 'Request status'
+      it_behaves_like 'Request status success'
 
       it_behaves_like 'Returns list of' do
         let(:json_resource) { json['answers'] }
@@ -57,7 +57,7 @@ describe 'Answers API', type: :request do
 
       before { get api_path, params: { access_token: access_token.token },headers: headers }
 
-      it_behaves_like 'Request status'
+      it_behaves_like 'Request status success'
 
       it_behaves_like 'Returns fields' do
         let(:fields) { %w[id body question_id created_at updated_at] }
