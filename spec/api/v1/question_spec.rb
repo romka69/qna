@@ -124,4 +124,44 @@ describe 'Questions API', type: :request do
       end
     end
   end
+
+  describe 'POST /api/v1/questions/' do
+    let(:api_path) { "/api/v1/questions" }
+    let(:access_token) { create :access_token }
+
+    it_behaves_like 'API Authorizable' do
+      let(:method) { :post }
+    end
+
+    it 'returns 401 status if there is no access_token' do
+      post api_path, params: { question: attributes_for(:question) }
+      expect(response.status).to eq 401
+    end
+
+    it 'returns 401 status if access_token is invalid' do
+      post api_path, params: { access_token: '12345', question: attributes_for(:question) }
+      expect(response.status).to eq 401
+    end
+
+    context 'Create question valid attributes' do
+      before { post api_path, params: {
+          access_token: access_token.token,
+          question: attributes_for(:question) } }
+
+
+      it_behaves_like 'Request status 201'
+
+      it 'add question in db' do
+        expect(Question.count).to eq 1
+      end
+
+      it 'return fields' do
+        %w[id title body author_id created_at updated_at].each do |attr|
+          expect(json['question'].has_key?(attr)).to be_truthy
+        end
+      end
+    end
+
+    context 'Create question invalid attributes'
+  end
 end
