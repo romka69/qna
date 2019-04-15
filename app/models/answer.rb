@@ -21,4 +21,12 @@ class Answer < ApplicationRecord
       question.badge&.update!(user: author)
     end
   end
+
+  after_create :send_to_author_question
+
+  private
+
+  def send_to_author_question
+    NewAnswerMailer.new_answer(self).deliver_later
+  end
 end

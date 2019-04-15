@@ -9,6 +9,6 @@ class DailyDigestMailer < ApplicationMailer
     @questions = Question.where(created_at: Date.today-1)
 
     mail to: user.email,
-         subject: "Whats a beautiful day for die."
+         subject: "Your digest from QNA."
   end
 end
