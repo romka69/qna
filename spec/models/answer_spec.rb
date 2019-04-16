@@ -49,12 +49,13 @@ RSpec.describe Answer, type: :model do
     expect(Answer.new.files).to be_an_instance_of(ActiveStorage::Attached::Many)
   end
 
-  describe 'Email' do
+  describe 'Send answer' do
     let(:user) { create :user }
     let(:question) { create :question, author: user }
+    let!(:answer) { create :answer, question: question, author: user }
 
-    it 'send answer to author question when answer will be created' do
-      expect(NewAnswerMailer).to receive(:new_answer).and_call_original
+    it 'to subscribers question when answer will be created' do
+      expect(NewAnswerJob).to receive(:perform_later).with(answer)
       create(:answer, question: question, author: user)
     end
   end

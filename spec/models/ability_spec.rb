@@ -26,6 +26,8 @@ RSpec.describe Ability, type: :model do
     let(:question2) { create :question, author: user2 }
     let(:answer) { create :answer, question: question, author: user }
     let(:answer2) { create :answer, question: question, author: user2 }
+    let(:subscription) { create :subscription, question: question, user: user }
+    let(:subscription2) { create :subscription, question: question, user: user2 }
 
     it { should_not be_able_to :manage, :all }
     it { should be_able_to :read, :all }
@@ -33,6 +35,7 @@ RSpec.describe Ability, type: :model do
     it { should be_able_to :create, Question }
     it { should be_able_to :create, Answer }
     it { should be_able_to :create, Comment }
+    it { should be_able_to :create, Subscription }
 
     it { should be_able_to :update, question }
     it { should_not be_able_to :update, question2 }
@@ -45,6 +48,9 @@ RSpec.describe Ability, type: :model do
 
     it { should be_able_to :destroy, answer }
     it { should_not be_able_to :destroy, answer2 }
+
+    it { should be_able_to :destroy, subscription }
+    it { should_not be_able_to :destroy, subscription2 }
 
     it { should be_able_to :destroy, ActiveStorage::Attachment }
 

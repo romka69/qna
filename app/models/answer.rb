@@ -22,11 +22,11 @@ class Answer < ApplicationRecord
     end
   end
 
-  after_create :send_to_author_question
+  after_create :send_new_answer_in_question
 
   private
 
-  def send_to_author_question
-    NewAnswerMailer.new_answer(self).deliver_later
+  def send_new_answer_in_question
+    NewAnswerJob.perform_later(self)
   end
 end

@@ -11,6 +11,8 @@ class User < ApplicationRecord
   has_many :comments, foreign_key: 'author_id', dependent: :nullify
   has_many :badges, dependent: :nullify
   has_many :votes, dependent: :destroy
+  has_many :subscriptions, dependent: :destroy
+  has_many :subscribers, through: :subscriptions, source: :question
 
   def self.find_for_oauth(auth)
     FindForOauthService.new(auth).call
@@ -22,5 +24,9 @@ class User < ApplicationRecord
 
   def author_of?(object)
     object.author_id == id
+  end
+
+  def subscribed_to?(question)
+    subscribers.exists?(question.id)
   end
 end
