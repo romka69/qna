@@ -12,7 +12,7 @@ class User < ApplicationRecord
   has_many :badges, dependent: :nullify
   has_many :votes, dependent: :destroy
   has_many :subscriptions, dependent: :destroy
-  has_many :subscribers, through: :subscriptions, source: :question
+  has_many :subscribed_questions, through: :subscriptions, source: :question
 
   def self.find_for_oauth(auth)
     FindForOauthService.new(auth).call
@@ -27,6 +27,6 @@ class User < ApplicationRecord
   end
 
   def subscribed_to?(question)
-    subscribers.exists?(question.id)
+    subscribed_questions.exists?(question.id)
   end
 end

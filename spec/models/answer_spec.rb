@@ -51,12 +51,10 @@ RSpec.describe Answer, type: :model do
 
   describe 'Send answer' do
     let(:user) { create :user }
-    let(:question) { create :question, author: user }
-    let!(:answer) { create :answer, question: question, author: user }
 
     it 'to subscribers question when answer will be created' do
-      expect(NewAnswerJob).to receive(:perform_later).with(answer)
-      create(:answer, question: question, author: user)
+      expect(NewAnswerJob).to receive(:perform_later).with(instance_of(Answer))
+      Answer.create(question: question, author: user, body: 'answer')
     end
   end
 

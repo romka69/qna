@@ -9,7 +9,7 @@ RSpec.describe NewAnswerToSubscribers do
 
   before do
     users.each do |u|
-      answer.question.subscriptions.create(user: user)
+      answer.question.subscriptions.create(user: u)
     end
 
     users.push(question.author)

@@ -5,11 +5,10 @@ class SubscriptionsController < ApplicationController
 
   def create
     question = Question.find(params[:question_id])
-    @subscription = Subscription.create(question: question, user: current_user)
+    @subscription = question.subscriptions.create(user: current_user)
   end
 
   def destroy
-    #@subscription = Subscription.find(params[:id])
     @subscription = current_user.subscriptions.find(params[:id])
     @subscription.destroy
   end

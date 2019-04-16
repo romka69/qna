@@ -6,7 +6,7 @@ class Question < ApplicationRecord
   belongs_to :author, class_name: 'User'
   has_many :links, dependent: :destroy, as: :linkable
   has_many :subscriptions, dependent: :destroy
-  has_many :subscribed, through: :subscriptions, source: :user
+  has_many :subscribers, through: :subscriptions, source: :user
   has_one :badge, dependent: :destroy
 
   has_many_attached :files
