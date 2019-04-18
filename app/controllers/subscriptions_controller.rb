@@ -23,5 +23,5 @@ class SubscriptionsController < ApplicationController
     @subscription ||= Subscription.find(params[:id])
   end
 
-  helper_method :question
+  helper_method :question, :subscription
 end

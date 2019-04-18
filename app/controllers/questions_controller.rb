@@ -15,8 +15,6 @@ class QuestionsController < ApplicationController
     @answer = Answer.new
     @answer.links.build
     @comment = Comment.new
-    #@subscription = question.subscriptions.find_by(user: current_user)
-    subscription
   end
 
   def new
