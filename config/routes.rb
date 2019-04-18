@@ -10,6 +10,8 @@ Rails.application.routes.draw do
 
   root to: 'questions#index'
 
+  get '/search', to: 'searches#search'
+
   concern :votable do
     member do
       post :vote_up

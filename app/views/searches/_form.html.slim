@@ -1,0 +1,8 @@
+= form_with url: search_path, method: :get, local: true do |f|
+  p
+    = f.label :search
+    = f.text_field :search
+  p
+    //list of models
+
+  p = f.submit 'Scan'
