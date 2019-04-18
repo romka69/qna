@@ -21,4 +21,12 @@ class Answer < ApplicationRecord
       question.badge&.update!(user: author)
     end
   end
+
+  after_create :send_new_answer_in_question
+
+  private
+
+  def send_new_answer_in_question
+    NewAnswerJob.perform_later(self)
+  end
 end

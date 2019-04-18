@@ -40,6 +40,8 @@ class QuestionsController < ApplicationController
     else
       head :forbidden
     end
+
+    subscription
   end
 
   def destroy
@@ -58,7 +60,11 @@ class QuestionsController < ApplicationController
     @question ||= params[:id] ? Question.with_attached_files.find(params[:id]) : Question.new
   end
 
-  helper_method :question
+  def subscription
+    @subscription ||= question.subscriptions.find_by(user: current_user)
+  end
+
+  helper_method :question, :subscription
 
   def question_params
     params.require(:question).permit(:title, :body, files: [],

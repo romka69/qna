@@ -49,6 +49,16 @@ RSpec.describe Answer, type: :model do
     expect(Answer.new.files).to be_an_instance_of(ActiveStorage::Attached::Many)
   end
 
+  describe 'Send answer' do
+    let(:user) { create :user }
+
+    it 'to subscribers question when answer will be created' do
+      expect(NewAnswerJob).to receive(:perform_later).with(instance_of(Answer))
+      Answer.create(question: question, author: user, body: 'answer')
+    end
+  end
+
+
   it_behaves_like 'votable' do
     let(:model) { create :answer, question: question, author: user }
   end

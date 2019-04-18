@@ -29,5 +29,9 @@ p = question.body
 
   = render 'edit_form'
 
+- if can?(:create, Subscription)
+  .subscribe-option
+    = render 'subscriptions/subscription', resource: question
+
 .comment-block
   = render 'comments/form', resource: question
