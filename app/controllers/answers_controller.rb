@@ -49,10 +49,14 @@ class AnswersController < ApplicationController
   end
 
   def question
-    @question = Question.find(params[:question_id])
+    @question = if params[:question_id]
+                  Question.find(params[:question_id])
+                else
+                  answer.question
+                end
   end
 
-  helper_method :answer
+  helper_method :answer, :question
 
   def answer_params
     params.require(:answer).permit(:body, files: [], links_attributes: %i[name url id _destroy])

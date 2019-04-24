@@ -41,7 +41,7 @@ class QuestionsController < ApplicationController
       head :forbidden
     end
 
-    subscription
+    #subscription
   end
 
   def destroy

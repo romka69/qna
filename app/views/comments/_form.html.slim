@@ -1,5 +1,7 @@
 .comments
-  = render resource.comments
+  - if resource.comments.exists?
+    p Comments:
+    = render resource.comments
 
 .comment-errors
 

@@ -1,3 +1,4 @@
+p Answer:
 - if user_signed_in?
   = render 'votes/vote', resource: answer
 
@@ -29,11 +30,14 @@ p = answer.body
   .settings
     = link_to 'Delete answer', answer_path(answer), method: :delete, remote: true
     '  |
-    = link_to 'Pick best answer', pick_the_best_answer_path(answer), method: :patch, remote: true
-    '  |
     = link_to 'Edit answer','#', class: 'edit-answer-link', data: { answer_id: answer.id }
 
   = render 'answers/edit_form', answer: answer
 
+- if current_user&.author_of?(question)
+  = link_to 'Pick best answer', pick_the_best_answer_path(answer), method: :patch, remote: true
+
 .comment-block
   = render 'comments/form', resource: answer
+
+hr
