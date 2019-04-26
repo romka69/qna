@@ -1,10 +1,11 @@
-.question-errors
-  = render 'shared/errors', resource: question
+- cache question do
+  .question-errors
+    = render 'shared/errors', resource: question
 
-div class = "question question-#{question.id}" data-resource-id=question.id
-  = render 'question_part'
+  div class = "question question-#{question.id}" data-resource-id=question.id
+    = render 'question_part'
 
-.answers
-  = render question.answers.sort_by_best
+  .answers
+    = render question.answers.sort_by_best
 
-= render 'answers/form'
+  = render 'answers/form'

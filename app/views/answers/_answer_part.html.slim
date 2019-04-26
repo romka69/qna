@@ -1,43 +1,44 @@
-p Answer:
-- if user_signed_in?
-  = render 'votes/vote', resource: answer
+- cache answer do
+  p Answer:
+  - if user_signed_in?
+    = render 'votes/vote', resource: answer
 
-p = answer.body
+  p = answer.body
 
-- if answer.best?
-  .best-answer
-    p = 'Best answer'
+  - if answer.best?
+    .best-answer
+      p = 'Best answer'
 
-- if answer.files.attached?
-  .storages
-    = render 'file', answer: answer
+  - if answer.files.attached?
+    .storages
+      = render 'file', answer: answer
 
-- if answer.links.present?
-  .links
-    p Links:
-    ul
-      - answer.links.each do |link|
-        - if link.gist_url?
-          p = gist(link.url)
+  - if answer.links.present?
+    .links
+      p Links:
+      ul
+        - answer.links.each do |link|
+          - if link.gist_url?
+            p = gist(link.url)
 
-        li class="link-#{link.id}"
-          = link_to link.name, link.url
-          - if current_user&.author_of?(answer)
-            '  |
-            = link_to 'Delete link', link_path(link), method: :delete, remote: true
+          li class="link-#{link.id}"
+            = link_to link.name, link.url
+            - if current_user&.author_of?(answer)
+              '  |
+              = link_to 'Delete link', link_path(link), method: :delete, remote: true
 
-- if current_user&.author_of?(answer)
-  .settings
-    = link_to 'Delete answer', answer_path(answer), method: :delete, remote: true
-    '  |
-    = link_to 'Edit answer','#', class: 'edit-answer-link', data: { answer_id: answer.id }
+  - if current_user&.author_of?(answer)
+    .settings
+      = link_to 'Delete answer', answer_path(answer), method: :delete, remote: true
+      '  |
+      = link_to 'Edit answer','#', class: 'edit-answer-link', data: { answer_id: answer.id }
 
-  = render 'answers/edit_form', answer: answer
+    = render 'answers/edit_form', answer: answer
 
-- if current_user&.author_of?(question)
-  = link_to 'Pick best answer', pick_the_best_answer_path(answer), method: :patch, remote: true
+  - if current_user&.author_of?(question)
+    = link_to 'Pick best answer', pick_the_best_answer_path(answer), method: :patch, remote: true
 
-.comment-block
-  = render 'comments/form', resource: answer
+  .comment-block
+    = render 'comments/form', resource: answer
 
-hr
+  hr
